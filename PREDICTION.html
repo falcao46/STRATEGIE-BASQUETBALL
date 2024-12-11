@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégie Basketball</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #f4f4f9;
+            font-size: 14px; /* Réduire la taille de la police */
+            text-align: center;
+            color: #000; /* Couleur de la police en noir */
+        }
+        .sports-logos {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .sports-logos i {
+            font-size: 48px;
+            margin: 0 15px;
+            color: #333;
+        }
+        .content {
+            display: none;
+        }
+        .content.active {
+            display: block;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: center;
+        }
+        th {
+            background-color: #f0ad4e;
+            color: white;
+            font-size: 14px; /* Réduire la taille de la police */
+        }
+        .highlight {
+            background-color: #d9edf7;
+        }
+        .prediction {
+            font-weight: bold;
+            vertical-align: middle; /* Centrer verticalement */
+            font-size: 20px; /* Agrandir la taille de la police pour la prédiction */
+            color: #87CEEB; /* Couleur du texte pour plus de contraste */
+        }
+        .percentage {
+            font-weight: bold;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #4cae4c;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        .success-message {
+            color: green;
+            margin-top: 10px;
+        }
+        .clear-button {
+            background-color: red; /* Couleur rouge pour le bouton effacer */
+            font-weight: bold; /* Rendre le texte en gras */
+            color: white; /* Couleur du texte en blanc pour plus de contraste */
+        }
+        .clear-button:hover {
+            background-color: #ff0000;
+        }
+        .verify-icon {
+            margin-left: 5px;
+            color: #5cb85c;
+            cursor: pointer;
+        }
+        @keyframes confettiAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(20px);
+            }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            animation: confettiAnimation 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-size: 18px; color: #000;">Stratégie Basketball</h1>
+
+    <div class="sports-logos">
+        <i class="fas fa-basketball-ball"></i>
+        <i class="fas fa-futbol"></i>
+        <i class="fas fa-hockey-puck"></i>
+    </div>
+
+    <div id="registrationContent" class="content active">
+        <div class="form-container">
+            <h2>Inscription</h2>
+            <form id="registrationForm">
+                <input type="text" id="firstName" placeholder="Prénom" required>
+                <input type="text" id="lastName" placeholder="Nom" required>
+                <div style="display: flex; align-items: center;">
+                    <input type="password" id="password" placeholder="Mot de passe" required style="flex: 1;">
+                    <i class="fas fa-eye verify-icon" onclick="togglePasswordVisibility()"></i>
+                </div>
+                <button type="submit" id="submitButton">S'inscrire</button>
+            </form>
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+        </div>
+    </div>
+
+    <div id="basketballContent" class="content">
+        <h2 style="font-size: 16px; color: #000;">Résultats des 5 Derniers Matchs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Match</th>
+                    <th>Équipe A</th>
+                    <th>Équipe B</th>
+                    <th>Total But</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Match 1</td>
+                    <td><input type="number" placeholder="Score A" style="width: 50px;"></td>
+                    <td><input type="number" placeholder="Score B" style="width: 50px;"></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Match 2</td>
+                    <td><input type="number" placeholder="Score A" style="width: 50px;"></td>
+                    <td><input type="number" placeholder="Score B" style="width: 50px;"></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Match 3</td>
+                    <td><input type="number" placeholder="Score A" style="width: 50px;"></td>
+                    <td><input type="number" placeholder="Score B" style="width: 50px;"></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Match 4</td>
+                    <td><input type="number" placeholder="Score A" style="width: 50px;"></td>
+                    <td><input type="number" placeholder="Score B" style="width: 50px;"></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Match 5</td>
+                    <td><input type="number" placeholder="Score A" style="width: 50px;"></td>
+                    <td><input type="number" placeholder="Score B" style="width: 50px;"></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Pourcentage de victoires</td>
+                    <td id="percentA" class="percentage">-</td>
+                    <td id="percentB" class="percentage">-</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button onclick="calculateStats()" id="submitStatsButton">Soumettre</button>
+        <button class="clear-button" onclick="clearScores()">Effacer les scores</button>
+
+        <h2 style="font-size: 16px; color: #000;">Statistiques Calculées</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Match</th>
+                    <th>Plus Faible Score</th>
+                    <th>Moyenne des Scores</th>
+                    <th>Plus Grand Score</th>
+                    <th>Prédiction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Équipe A</td>
+                    <td id="minA">-</td>
+                    <td id="avgA">-</td>
+                    <td id="maxA">-</td>
+                    <td rowspan="3" id="prediction" class="prediction">-</td>
+                </tr>
+                <tr>
+                    <td>Équipe B</td>
+                    <td id="minB">-</td>
+                    <td id="avgB">-</td>
+                    <td id="maxB">-</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td id="totalMin">-</td>
+                    <td id="totalAvg">-</td>
+                    <td id="totalMax">-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 style="font-size: 16px; color: #000;">Dernier Match des Deux Équipes</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Équipe</th>
+                    <th>Plus Petit Score</th>
+                    <th>Plus Grand Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Équipe A</td>
+                    <td><input type="number" id="minScoreA" placeholder="Score A" style="width: 50px;"></td>
+                    <td><input type="number" id="maxScoreA" placeholder="Score A" style="width: 50px;"></td>
+                </tr>
+                <tr>
+                    <td>Équipe B</td>
+                    <td><input type="number" id="minScoreB" placeholder="Score B" style="width: 50px;"></td>
+                    <td><input type="number" id="maxScoreB" placeholder="Score B" style="width: 50px;"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.4.0/confetti.min.js"></script>
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const verifyIcon = document.querySelector('.verify-icon');
+            const submitButton = document.getElementById('submitButton');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                verifyIcon.classList.add('fa-eye-slash');
+                verifyIcon.classList.remove('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                verifyIcon.classList.add('fa-eye');
+                verifyIcon.classList.remove('fa-eye-slash');
+            }
+
+            // Validate password and change button color
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (passwordPattern.test(passwordInput.value)) {
+                submitButton.style.backgroundColor = '#28a745'; // Green color
+                submitButton.style.cursor = 'pointer';
+            } else {
+                submitButton.style.backgroundColor = '#5cb85c'; // Default color
+                submitButton.style.cursor = 'not-allowed';
+            }
+        }
+
+        function showContent(contentId) {
+            const basketballContent = document.getElementById('basketballContent');
+            const registrationContent = document.getElementById('registrationContent');
+
+            if (contentId === 'basketball') {
+                basketballContent.classList.add('active');
+                registrationContent.classList.remove('active');
+                // Déclencher l'animation de confettis
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } else if (contentId === 'registration') {
+                registrationContent.classList.add('active');
+                basketballContent.classList.remove('active');
+            }
+        }
+
+        function calculateStats() {
+            const rows = document.querySelectorAll('tbody tr');
+            let scoresA = [];
+            let scoresB = [];
+            let winsA = 0;
+            let winsB = 0;
+
+            rows.forEach((row, index) => {
+                if (index < 5) { // Only process the first 5 table rows
+                    const scoreA = parseInt(row.cells[1].querySelector('input').value) || 0;
+                    const scoreB = parseInt(row.cells[2].querySelector('input').value) || 0;
+
+                    scoresA.push(scoreA);
+                    scoresB.push(scoreB);
+                    row.cells[3].innerText = scoreA + scoreB; // Update total score
+
+                    if (scoreA > scoreB) {
+                        winsA++;
+                    } else if (scoreB > scoreA) {
+                        winsB++;
+                    }
+                }
+            });
+
+            const totalMatches = 5;
+            const percentA = (winsA / totalMatches * 100).toFixed(2);
+            const percentB = (winsB / totalMatches * 100).toFixed(2);
+
+            document.getElementById('percentA').innerText = percentA + "%";
+            document.getElementById('percentB').innerText = percentB + "%";
+
+            const minA = Math.min(...scoresA);
+            const avgA = (scoresA.reduce((a, b) => a + b, 0) / scoresA.length).toFixed(2);
+            const maxA = Math.max(...scoresA);
+
+            const minB = Math.min(...scoresB);
+            const avgB = (scoresB.reduce((a, b) => a + b, 0) / scoresB.length).toFixed(2);
+            const maxB = Math.max(...scoresB);
+
+            const totalMin = minA + minB;
+            const totalMax = maxA + maxB;
+            const totalAvg = (parseFloat(avgA) + parseFloat(avgB)).toFixed(2);
+
+            // Calculate prediction
+            const prediction = Math.round(parseFloat(avgA) + parseFloat(avgB));
+
+            document.getElementById('minA').innerText = minA;
+            document.getElementById('avgA').innerText = avgA;
+            document.getElementById('maxA').innerText = maxA;
+
+            document.getElementById('minB').innerText = minB;
+            document.getElementById('avgB').innerText = avgB;
+            document.getElementById('maxB').innerText = maxB;
+
+            document.getElementById('totalMin').innerText = totalMin;
+            document.getElementById('totalMax').innerText = totalMax;
+            document.getElementById('totalAvg').innerText = totalAvg;
+            document.getElementById('prediction').innerText = prediction;
+
+            // Change the color of the "Soumettre" button to green
+            document.getElementById('submitStatsButton').style.backgroundColor = '#28a745';
+
+            // Déclencher l'animation de confettis
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Calculate and display the smallest and largest scores
+            document.getElementById('minScoreA').value = minA;
+            document.getElementById('maxScoreA').value = maxA;
+            document.getElementById('minScoreB').value = minB;
+            document.getElementById('maxScoreB').value = maxB;
+        }
+
+        function clearScores() {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+                if (index < 5) { // Only process the first 5 table rows
+                    row.cells[1].querySelector('input').value = '';
+                    row.cells[2].querySelector('input').value = '';
+                    row.cells[3].innerText = '-';
+                }
+            });
+            document.getElementById('percentA').innerText = '-';
+            document.getElementById('percentB').innerText = '-';
+            document.getElementById('minA').innerText = '-';
+            document.getElementById('avgA').innerText = '-';
+            document.getElementById('maxA').innerText = '-';
+            document.getElementById('minB').innerText = '-';
+            document.getElementById('avgB').innerText = '-';
+            document.getElementById('maxB').innerText = '-';
+            document.getElementById('totalMin').innerText = '-';
+            document.getElementById('totalMax').innerText = '-';
+            document.getElementById('totalAvg').innerText = '-';
+            document.getElementById('prediction').innerText = '-';
+
+            // Reset the color of the "Soumettre" button
+            document.getElementById('submitStatsButton').style.backgroundColor = '#5cb85c';
+
+            // Clear the smallest and largest scores
+            document.getElementById('minScoreA').value = '';
+            document.getElementById('maxScoreA').value = '';
+            document.getElementById('minScoreB').value = '';
+            document.getElementById('maxScoreB').value = '';
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            errorMessage.innerText = '';
+            successMessage.innerText = '';
+
+            // Validation du mot de passe
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (!passwordPattern.test(password)) {
+                errorMessage.innerText = 'Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre.';
+                return;
+            }
+
+            // Si tout est validé, afficher le message de confirmation
+            successMessage.innerText = 'Inscription réussie !';
+
+            // Afficher le contenu de la stratégie basketball
+            showContent('basketball');
+        });
+    </script>
+</body>
+</html>
